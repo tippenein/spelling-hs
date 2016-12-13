@@ -1,20 +1,21 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TupleSections #-}
 
 -- http://norvig.com/spell-correct.html
-module Main where
+module Spelling where
 
+import qualified Data.Char as Char
+import qualified Data.HashMap.Strict as Map
+import qualified Data.HashSet as HashSet
 import           Data.List (nub)
-import qualified Data.Map as Map
 import qualified Data.MultiSet as MultiSet
-import           Data.Set (Set)
-import qualified Data.Set as Set
 import qualified Data.Text as T
-import           Text.Printf (printf)
 
-import           Protolude
+import           Protolude hiding (Set)
 
-type Hist = MultiSet.MultiSet Text
+type Set a = HashSet.HashSet a
+type Hist = Map.HashMap Text Int
 
 -- dictLocation :: FilePath
 -- dictLocation = "/usr/share/dict/words"
@@ -23,7 +24,8 @@ alphabet :: [Text]
 alphabet = fmap T.singleton ['a'..'z']
 
 inAlphabet :: Char -> Bool
-inAlphabet t = t `elem` ['a'..'z']
+inAlphabet = Char.isAsciiLower
+{-# INLINE inAlphabet #-}
 
 -- def P(word, N=sum(WORDS.values())):
 --     return WORDS[word] / N
@@ -31,15 +33,15 @@ inAlphabet t = t `elem` ['a'..'z']
 prob :: Text -> Hist -> Int
 prob t ms = occurences `div` totalWords
   where
-    occurences = fromMaybe 0 $ Map.lookup t (MultiSet.toMap ms)
-    totalWords = MultiSet.distinctSize ms
+    occurences = fromMaybe 0 $ Map.lookup t ms
+    totalWords = Map.size ms
 
 words :: Text -> [Text]
 words = T.split (not . inAlphabet) . T.toLower
 
 -- | create a Multi Set (Histogram) from a collection of words
 toHistogram :: [Text] -> Hist
-toHistogram = MultiSet.fromList
+toHistogram = Map.fromListWith (+) . fmap (,1)
 
 -- def correction(word):
 --     return max(candidates(word), key=P)
@@ -55,17 +57,17 @@ candidates hist t = detect
   [ known hist [t]
   , known hist (edits1 t)
   , known hist (edits2 t)
-  , Set.fromList [t]
+  , HashSet.fromList [t]
   ]
 
 -- | get first non-empty
 detect :: [Set Text] -> Set Text
-detect = fromMaybe Set.empty . head . filter (not . Set.null)
+detect = fromMaybe HashSet.empty . head . filter (not . HashSet.null)
 -- def known(words):
 --     return set(w for w in words if w in WORDS)
 -- | The subset of `words` that appear in the dictionary of WORDS.
 known :: Hist -> [Text] -> Set Text
-known hist ws = Set.fromList $ filter (\w -> MultiSet.member w hist) ws
+known hist ws = HashSet.fromList $ filter (\w -> Map.member w hist) ws
 -- member :: Ord a => a -> MultiSet a -> Bool
 -- filter :: (a -> Bool) -> MultiSet a -> MultiSet a
 
@@ -117,20 +119,3 @@ unSplitWith f (l, r) = guard (f r) >> pure (l, r)
 -- | All edits that are two edits away from `word`.
 edits2 :: Text -> [Text]
 edits2 w = [ e2 | e1 <- edits1 w, e2 <- edits1 e1 ]
-
-main :: IO ()
-main = do
-  hist <- toHistogram . words <$> readFile "big.txt"
-  -- let can = candidates hist "watever"
-  -- traverse_ putText can
-  -- putText $ correction hist "speling" -- spelling
-  -- putText $ correction hist "korrectud" -- "corrected"
-  -- let k = known hist ["hero", "whatever", "nerp"]
-  -- traverse_ putText k
-
-  traverse_ (putText . show) $ Map.assocs $ MultiSet.toMap hist
-  -- let p = prob "the" hist
-  -- printf "probability of 'the' -> %i" p
-
-  -- dict <- T.lines <$> readFile dictLocation
-  -- traverse_ putText  . take 5 dict
