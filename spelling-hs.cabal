@@ -1,0 +1,26 @@
+name:                spelling-hs
+version:             0.1.0.0
+synopsis:            reimplement http://norvig.com/spell-correct.html
+-- description:
+license:             MIT
+license-file:        LICENSE
+author:              brady.ouren
+maintainer:          brady.ouren@gmail.com
+-- copyright:
+category:            Text
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  exposed-modules:     Main
+  -- other-modules:
+  other-extensions:    NoImplicitPrelude, OverloadedStrings
+  build-depends:
+      base >=4.9
+    , containers
+    , protolude
+    , text
+    , multiset
+  hs-source-dirs:      src
+  default-language:    Haskell2010

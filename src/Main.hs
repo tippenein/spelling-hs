@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 -- http://norvig.com/spell-correct.html
+module Main where
 
 import           Data.List (nub)
 import qualified Data.Map as Map
