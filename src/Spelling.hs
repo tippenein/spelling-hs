@@ -6,10 +6,9 @@
 module Spelling where
 
 import qualified Data.Char as Char
-import qualified Data.HashMap.Strict as Map
+import qualified Data.HashMap.Lazy as Map
 import qualified Data.HashSet as HashSet
 import           Data.List (nub)
-import qualified Data.MultiSet as MultiSet
 import qualified Data.Text as T
 
 import           Protolude hiding (Set)
