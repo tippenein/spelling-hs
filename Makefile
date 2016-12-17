@@ -14,6 +14,7 @@ html:
 
 benchmark:
 	bench 'stack exec spelling-hs -- toHistogram'
-	bench 'stack exec spelling-hs -- words'
+	bench 'stack exec spelling-hs -- wordsPre'
+	bench 'stack exec spelling-hs -- wordsFast'
 	bench 'stack exec spelling-hs -- proba'
 	bench 'stack exec spelling-hs -- all'
