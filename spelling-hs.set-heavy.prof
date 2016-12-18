@@ -1,0 +1,223 @@
+	Sun Dec 18 15:56 2016 Time and Allocation Profiling Report  (Final)
+
+	   spelling-hs +RTS -N -p -RTS
+
+	total time  =        1.33 secs   (1328 ticks @ 1000 us, 1 processor)
+	total alloc = 1,059,607,912 bytes  (excludes profiling overheads)
+
+COST CENTRE           MODULE                 %time %alloc
+
+toHistogram           Spelling                36.1   24.1
+edits2                Spelling                16.6   16.1
+main.makeCorrection   Main                     7.2    9.9
+edits1                Spelling                 7.1   10.4
+edits1.inserts        Spelling                 6.9   15.6
+replaces              Spelling                 6.8   15.0
+readChunk             Data.Text.Internal.IO    3.5    1.3
+readTextDevice        Data.Text.Internal.IO    3.2    0.2
+hash                  Data.HashMap.Base        3.2    0.8
+hashByteArrayWithSalt Data.Hashable.Class      2.7    0.0
+known                 Spelling                 1.7    0.1
+copy                  Data.HashMap.Array       1.1    0.7
+run                   Data.Text.Array          0.8    1.3
+new_                  Data.HashMap.Array       0.6    3.2
+
+
+                                                                                  individual      inherited
+COST CENTRE                     MODULE                         no.     entries  %time %alloc   %time %alloc
+
+MAIN                            MAIN                           163          0    0.0    0.0   100.0  100.0
+ main                           Main                           327          0    0.0    0.0   100.0  100.0
+  main.makeCorrection           Main                           330          0    7.2    9.9   100.0  100.0
+   toHistogram                  Spelling                       371          0   36.1   24.1    39.5   24.3
+    aBA                         Data.Text.Array                384    2116314    0.0    0.0     0.0    0.0
+    copy                        Data.HashMap.Array             383      45798    0.2    0.0     0.2    0.0
+    sparseIndex                 Data.HashMap.Base              382    1543962    0.5    0.0     0.5    0.0
+    new_                        Data.HashMap.Array             381      22899    0.1    0.2     0.1    0.2
+    hash                        Data.HashMap.Base              376    1091250    1.1    0.0     2.6    0.0
+     hashByteArrayWithSalt      Data.Hashable.Class            378    1091250    1.5    0.0     1.5    0.0
+     aBA                        Data.Text.Array                377    1091250    0.0    0.0     0.0    0.0
+   correction                   Spelling                       347          1    0.0    0.0    45.9   63.1
+    correction.\                Spelling                       480          1    0.0    0.0     0.2    0.0
+     prob                       Spelling                       481          2    0.0    0.0     0.2    0.0
+      prob.totalWords           Spelling                       488          2    0.0    0.0     0.2    0.0
+       size                     Data.HashMap.Base              489          2    0.2    0.0     0.2    0.0
+      prob.occurences           Spelling                       482          2    0.0    0.0     0.0    0.0
+       aBA                      Data.Text.Array                487          4    0.0    0.0     0.0    0.0
+       sparseIndex              Data.HashMap.Base              486          3    0.0    0.0     0.0    0.0
+       hash                     Data.HashMap.Base              483          2    0.0    0.0     0.0    0.0
+        hashByteArrayWithSalt   Data.Hashable.Class            485          2    0.0    0.0     0.0    0.0
+        aBA                     Data.Text.Array                484          2    0.0    0.0     0.0    0.0
+    candidates                  Spelling                       348          1    0.0    0.0    45.7   63.1
+     edits2                     Spelling                       431          1   16.6   16.1    42.8   62.6
+      aBA                       Data.Text.Array                477     283914    0.0    0.0     0.0    0.0
+      copy                      Data.HashMap.Array             476     143366    0.3    0.2     0.3    0.2
+      new_                      Data.HashMap.Array             475      71683    0.0    0.7     0.0    0.7
+      sparseIndex               Data.HashMap.Base              474     402483    0.1    0.0     0.1    0.0
+      hash                      Data.HashMap.Base              471     254812    0.8    0.4     1.6    0.4
+       hashByteArrayWithSalt    Data.Hashable.Class            473     254812    0.8    0.0     0.8    0.0
+       aBA                      Data.Text.Array                472     254812    0.0    0.0     0.0    0.0
+      edits1                    Spelling                       432        493    7.0   10.4    24.2   45.2
+       edits1.inserts           Spelling                       470        493    6.9   15.6     6.9   15.6
+       edits1.replaces'         Spelling                       465        493    0.0    0.0     6.8   14.9
+        replaces                Spelling                       466        493    6.8   14.9     6.8   14.9
+         unSplit                Spelling                       467       5173    0.0    0.0     0.0    0.0
+          unSplitWith           Spelling                       468       5173    0.0    0.0     0.0    0.0
+           aBA                  Data.Text.Array                469        986    0.0    0.0     0.0    0.0
+       aBA                      Data.Text.Array                463      19482    0.0    0.0     0.0    0.0
+       edits1.deletes'          Spelling                       459        493    0.0    0.0     0.2    0.4
+        deletes                 Spelling                       460        493    0.2    0.4     0.2    0.4
+         unSplit                Spelling                       461       5173    0.0    0.0     0.0    0.0
+          unSplitWith           Spelling                       462       5173    0.0    0.0     0.0    0.0
+           aBA                  Data.Text.Array                464        986    0.0    0.0     0.0    0.0
+       copy                     Data.HashMap.Array             458     386240    0.7    0.5     0.7    0.5
+       new_                     Data.HashMap.Array             457     213025    0.5    2.0     0.5    2.0
+       sparseIndex              Data.HashMap.Base              456     301649    0.2    0.0     0.2    0.0
+       hash                     Data.HashMap.Base              441     265045    1.1    0.4     1.4    0.4
+        hashByteArrayWithSalt   Data.Hashable.Class            452     265045    0.4    0.0     0.4    0.0
+        aBA                     Data.Text.Array                451     265045    0.0    0.0     0.0    0.0
+       edits1.transposes'       Spelling                       436        493    0.0    0.0     0.5    0.9
+        transposes              Spelling                       437        493    0.0    0.1     0.5    0.9
+         append                 Data.Text                      450       4187    0.0    0.0     0.0    0.0
+          run                   Data.Text.Array                453       3694    0.0    0.0     0.0    0.0
+           maBA                 Data.Text.Array                455       7388    0.0    0.0     0.0    0.0
+           aBA                  Data.Text.Array                454       7388    0.0    0.0     0.0    0.0
+         transposes.swap'       Spelling                       442       4187    0.0    0.1     0.5    0.8
+          transposes.swap'.rest Spelling                       446       4187    0.1    0.2     0.1    0.2
+          transposes.swap'.one' Spelling                       445       4187    0.0    0.0     0.0    0.0
+          transposes.swap'.two  Spelling                       444       4187    0.1    0.1     0.1    0.1
+          concat                Data.Text                      443       4187    0.2    0.3     0.3    0.3
+           run                  Data.Text.Array                447       4187    0.2    0.0     0.2    0.0
+            maBA                Data.Text.Array                449      12068    0.0    0.0     0.0    0.0
+            aBA                 Data.Text.Array                448      12068    0.0    0.0     0.0    0.0
+         unSplitWith            Spelling                       438       5173    0.0    0.0     0.0    0.0
+          transposes.\          Spelling                       439       5173    0.0    0.0     0.0    0.0
+           compareSize          Data.Text.Internal.Fusion.Size 440       5173    0.0    0.0     0.0    0.0
+       edits1.splits            Spelling                       433        493    0.0    0.0     0.0    0.1
+        tails                   Data.Text                      435       5173    0.0    0.0     0.0    0.0
+        inits                   Data.Text                      434        493    0.0    0.0     0.0    0.0
+     edits1                     Spelling                       385          1    0.1    0.0     0.1    0.1
+      edits1.inserts            Spelling                       428          1    0.0    0.0     0.0    0.0
+      edits1.replaces'          Spelling                       420          1    0.0    0.0     0.0    0.0
+       replaces                 Spelling                       421          1    0.0    0.0     0.0    0.0
+        unSplit                 Spelling                       422         10    0.0    0.0     0.0    0.0
+         unSplitWith            Spelling                       423         10    0.0    0.0     0.0    0.0
+          aBA                   Data.Text.Array                427          2    0.0    0.0     0.0    0.0
+      aBA                       Data.Text.Array                418         38    0.0    0.0     0.0    0.0
+      edits1.deletes'           Spelling                       414          1    0.0    0.0     0.0    0.0
+       deletes                  Spelling                       415          1    0.0    0.0     0.0    0.0
+        unSplit                 Spelling                       416         10    0.0    0.0     0.0    0.0
+         unSplitWith            Spelling                       417         10    0.0    0.0     0.0    0.0
+          aBA                   Data.Text.Array                419          2    0.0    0.0     0.0    0.0
+      copy                      Data.HashMap.Array             413        748    0.0    0.0     0.0    0.0
+      new_                      Data.HashMap.Array             412        411    0.0    0.0     0.0    0.0
+      sparseIndex               Data.HashMap.Base              411        571    0.0    0.0     0.0    0.0
+      hash                      Data.HashMap.Base              395        511    0.0    0.0     0.0    0.0
+       hashByteArrayWithSalt    Data.Hashable.Class            407        511    0.0    0.0     0.0    0.0
+       aBA                      Data.Text.Array                406        511    0.0    0.0     0.0    0.0
+      edits1.transposes'        Spelling                       390          1    0.0    0.0     0.0    0.0
+       transposes               Spelling                       391          1    0.0    0.0     0.0    0.0
+        append                  Data.Text                      405          8    0.0    0.0     0.0    0.0
+         run                    Data.Text.Array                408          7    0.0    0.0     0.0    0.0
+          maBA                  Data.Text.Array                410         14    0.0    0.0     0.0    0.0
+          aBA                   Data.Text.Array                409         14    0.0    0.0     0.0    0.0
+        transposes.swap'        Spelling                       396          8    0.0    0.0     0.0    0.0
+         transposes.swap'.rest  Spelling                       401          8    0.0    0.0     0.0    0.0
+         transposes.swap'.one'  Spelling                       400          8    0.0    0.0     0.0    0.0
+         transposes.swap'.two   Spelling                       398          8    0.0    0.0     0.0    0.0
+         concat                 Data.Text                      397          8    0.0    0.0     0.0    0.0
+          run                   Data.Text.Array                402          8    0.0    0.0     0.0    0.0
+           maBA                 Data.Text.Array                404         23    0.0    0.0     0.0    0.0
+           aBA                  Data.Text.Array                403         23    0.0    0.0     0.0    0.0
+        unSplitWith             Spelling                       392         10    0.0    0.0     0.0    0.0
+         transposes.\           Spelling                       393         10    0.0    0.0     0.0    0.0
+          compareSize           Data.Text.Internal.Fusion.Size 394         10    0.0    0.0     0.0    0.0
+      edits1.splits             Spelling                       387          1    0.0    0.0     0.0    0.0
+       tails                    Data.Text                      389         10    0.0    0.0     0.0    0.0
+       inits                    Data.Text                      388          1    0.0    0.0     0.0    0.0
+     known                      Spelling                       365          3    1.7    0.1     2.8    0.4
+      copyM                     Data.HashMap.Array             479          1    0.0    0.0     0.0    0.0
+      new_                      Data.HashMap.Array             429      44099    0.0    0.3     0.0    0.3
+      known.\                   Spelling                       366     113348    0.8    0.0     1.1    0.0
+       aBA                      Data.Text.Array                478          4    0.0    0.0     0.0    0.0
+       sparseIndex              Data.HashMap.Base              430      46887    0.0    0.0     0.0    0.0
+       hash                     Data.HashMap.Base              367     113348    0.2    0.0     0.3    0.0
+        hashByteArrayWithSalt   Data.Hashable.Class            369     113348    0.1    0.0     0.1    0.0
+        aBA                     Data.Text.Array                368     113348    0.0    0.0     0.0    0.0
+     singleton                  Data.HashMap.Base              355          1    0.0    0.0     0.0    0.0
+      hash                      Data.HashMap.Base              356          1    0.0    0.0     0.0    0.0
+       hashByteArrayWithSalt    Data.Hashable.Class            364          1    0.0    0.0     0.0    0.0
+       aBA                      Data.Text.Array                363          1    0.0    0.0     0.0    0.0
+     detect                     Spelling                       350          0    0.0    0.0     0.0    0.0
+      null                      Data.HashMap.Base              354          3    0.0    0.0     0.0    0.0
+      head                      List                           353          0    0.0    0.0     0.0    0.0
+   putText                      Show                           342          0    0.0    0.0     0.0    0.0
+    putStrLn                    Data.Text.IO                   344          0    0.0    0.0     0.0    0.0
+     hPutStrLn                  Data.Text.IO                   345          1    0.0    0.0     0.0    0.0
+      hPutStr                   Data.Text.IO                   346          1    0.0    0.0     0.0    0.0
+   readFile                     Data.Text.IO                   334          0    0.0    0.0     7.5    2.7
+    hGetContents                Data.Text.IO                   337          1    0.0    0.0     7.5    2.7
+     concat                     Data.Text                      372          1    0.0    0.1     0.7    1.3
+      run                       Data.Text.Array                373          1    0.7    1.2     0.7    1.2
+       maBA                     Data.Text.Array                375       3206    0.0    0.0     0.0    0.0
+       aBA                      Data.Text.Array                374       3206    0.0    0.0     0.0    0.0
+     readChunk                  Data.Text.Internal.IO          338       3207    3.5    1.3     6.8    1.4
+      readTextDevice            Data.Text.Internal.IO          339       3207    3.2    0.2     3.2    0.2
+ CAF:main1                      Main                           324          0    0.0    0.0     0.0    0.0
+  main                          Main                           326          1    0.0    0.0     0.0    0.0
+ CAF:main31                     Main                           322          0    0.0    0.0     0.0    0.0
+  main                          Main                           328          0    0.0    0.0     0.0    0.0
+   main.makeCorrection          Main                           329          1    0.0    0.0     0.0    0.0
+ CAF:main35                     Main                           321          0    0.0    0.0     0.0    0.0
+  main                          Main                           331          0    0.0    0.0     0.0    0.0
+   main.makeCorrection          Main                           332          0    0.0    0.0     0.0    0.0
+    readFile                    Data.Text.IO                   333          1    0.0    0.0     0.0    0.0
+ CAF:main36                     Main                           320          0    0.0    0.0     0.0    0.0
+  main                          Main                           335          0    0.0    0.0     0.0    0.0
+   main.makeCorrection          Main                           336          0    0.0    0.0     0.0    0.0
+ CAF:main32                     Main                           319          0    0.0    0.0     0.0    0.0
+  main                          Main                           357          0    0.0    0.0     0.0    0.0
+   main.makeCorrection          Main                           358          0    0.0    0.0     0.0    0.0
+    unstream/resize             Data.Text.Internal.Fusion      361          1    0.0    0.0     0.0    0.0
+     maBA                       Data.Text.Array                362          2    0.0    0.0     0.0    0.0
+ CAF:main34                     Main                           318          0    0.0    0.0     0.0    0.0
+  main                          Main                           359          0    0.0    0.0     0.0    0.0
+   main.makeCorrection          Main                           360          0    0.0    0.0     0.0    0.0
+ CAF:toHistogram                Spelling                       283          0    0.0    0.0     0.0    0.0
+  toHistogram                   Spelling                       370          1    0.0    0.0     0.0    0.0
+ CAF:detect                     Spelling                       276          0    0.0    0.0     0.0    0.0
+  detect                        Spelling                       349          1    0.0    0.0     0.0    0.0
+ CAF:detect2                    Spelling                       275          0    0.0    0.0     0.0    0.0
+  detect                        Spelling                       351          0    0.0    0.0     0.0    0.0
+   head                         List                           352          1    0.0    0.0     0.0    0.0
+ CAF:alphabet                   Spelling                       269          0    0.0    0.0     0.0    0.0
+  alphabet                      Spelling                       424          1    0.0    0.0     0.0    0.0
+   run                          Data.Text.Array                426         26    0.0    0.0     0.0    0.0
+ CAF:alphabet1                  Spelling                       268          0    0.0    0.0     0.0    0.0
+  alphabet                      Spelling                       425          0    0.0    0.0     0.0    0.0
+ CAF:lvl2_rjHb                  Spelling                       259          0    0.0    0.0     0.0    0.0
+ CAF:n_rjHa                     Spelling                       258          0    0.0    0.0     0.0    0.0
+ CAF:ba_rjH9                    Spelling                       257          0    0.0    0.0     0.0    0.0
+ CAF                            Data.HashSet                   255          0    0.0    0.0     0.0    0.0
+  empty                         Data.HashSet                   386          1    0.0    0.0     0.0    0.0
+ CAF                            Data.HashMap.Base              253          0    0.0    0.0     0.0    0.0
+  bitsPerSubkey                 Data.HashMap.Base              380          1    0.0    0.0     0.0    0.0
+  empty                         Data.HashMap.Base              379          1    0.0    0.0     0.0    0.0
+ CAF                            Show                           248          0    0.0    0.0     0.0    0.0
+  putText                       Show                           341          1    0.0    0.0     0.0    0.0
+ CAF                            Data.Text.Array                245          0    0.0    0.0     0.0    0.0
+  empty                         Data.Text.Array                340          1    0.0    0.0     0.0    0.0
+ CAF                            Data.Text.IO                   242          0    0.0    0.0     0.0    0.0
+  putStrLn                      Data.Text.IO                   343          1    0.0    0.0     0.0    0.0
+ CAF                            Data.Text.Internal             241          0    0.0    0.0     0.0    0.0
+  empty_                        Data.Text.Internal             399          1    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Exception               216          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Handle.FD               214          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Handle.Internals        213          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.Event.Thread               208          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Encoding                202          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.FD                      201          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.Conc.Signal                192          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.Event.Poll                 185          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.IO.Encoding.Iconv          182          0    0.0    0.0     0.0    0.0
+ CAF                            GHC.Event.EPoll                179          0    0.0    0.0     0.0    0.0
