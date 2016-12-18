@@ -25,7 +25,7 @@ proba = do
   printf "probability of 'the' -> %i" p
 
 makeCorrection = do
-  hist <- toHistogram . words <$> readFile "big-words.txt"
+  hist <- toHistogram . fastWords <$> readFile "big.txt"
   -- putText $ correction hist "speling" -- spelling
   putText $ correction hist "korrectud" -- "corrected"
 
@@ -36,6 +36,7 @@ main = do
     ["wordsFast"] -> wordsFast
     ["toHistogram"] -> multiset
     ["proba"] -> proba
+    ["all"] -> makeCorrection
     _ -> makeCorrection
 
 -- main :: IO ()

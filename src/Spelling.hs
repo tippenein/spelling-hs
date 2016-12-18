@@ -8,15 +8,15 @@ module Spelling where
 
 import qualified Data.Char as Char
 import qualified Data.HashMap.Strict as Map
-import qualified Data.HashSet as HashSet
-import           Data.List (nub)
+import qualified Data.HashSet as Set
+import           Data.List (foldl')
 import qualified Data.Text as T
 import Data.Text.Unsafe (Iter(..), iter)
 import Data.Text.Internal (Text(..))
 
 import           Protolude hiding (Set)
 
-type Set a = HashSet.HashSet a
+type Set a = Set.HashSet a
 type Hist = Map.HashMap Text Int
 
 -- dictLocation :: FilePath
@@ -72,18 +72,18 @@ candidates hist t = detect
   [ known hist [t]
   , known hist (edits1 t)
   , known hist (edits2 t)
-  , HashSet.fromList [t]
+  , Set.fromList [t]
   ]
 
 -- | get first non-empty
 detect :: [Set Text] -> Set Text
-detect = fromMaybe HashSet.empty . head . filter (not . HashSet.null)
+detect = fromMaybe Set.empty . head . filter (not . Set.null)
 
 -- def known(words):
 --     return set(w for w in words if w in WORDS)
 -- | The subset of `words` that appear in the dictionary of WORDS.
 known :: Hist -> [Text] -> Set Text
-known hist ws = HashSet.fromList $ filter (\w -> Map.member w hist) ws
+known hist ws = Set.fromList $ filter (\w -> Map.member w hist) ws
 
 -- def edits1(word):
 --     letters    = 'abcdefghijklmnopqrstuvwxyz'
@@ -95,7 +95,7 @@ known hist ws = HashSet.fromList $ filter (\w -> Map.member w hist) ws
 --     return set(deletes + transposes + replaces + inserts)
 -- | All edits that are one edit away from `word`.
 edits1 :: Text -> [Text]
-edits1 w = nub' $ mconcat [transposes', deletes', replaces', inserts]
+edits1 w = nub' $ foldl' mappend mempty [transposes', deletes', replaces', inserts]
   where
     splits = zip (T.inits w) (T.tails w)
     deletes' = deletes splits
@@ -110,11 +110,11 @@ edits2 :: Text -> [Text]
 edits2 w = nub' [ e2 | !e1 <- edits1 w, !e2 <- edits1 e1 ]
 
 nub' :: [Text] -> [Text]
-nub' = HashSet.toList . HashSet.fromList
+nub' = Set.toList . Set.fromList
 
 type Splits = [(Text, Text)]
 
---     Transposes = [L + R[1] + R[0] + R[2:] for L, R in splits if len(R)>1]
+-- transposes = [L + R[1] + R[0] + R[2:] for L, R in splits if len(R)>1]
 transposes :: Splits -> [Text]
 transposes splits =
   [l <> swap' r | x <- splits, (l,r) <- unSplitWith (\a -> T.length a > 1) x]
@@ -130,12 +130,12 @@ deletes :: Splits -> [Text]
 deletes splits =
   [l <> T.tail r | x <- splits, (l,r) <- unSplit x]
 
--- [L + c + R[1:] for L, R in splits if R for c in letters]
+-- replaces = [L + c + R[1:] for L, R in splits if R for c in letters]
 replaces :: Splits -> [Text]
 replaces splits = [l <> c <> T.tail r | x <- splits, (l,r) <- unSplit x, c <- alphabet]
 
 unSplit :: (Monad f, Alternative f) => (Text, Text) -> f (Text,Text)
-unSplit (l, r) = guard(r /= "") >> pure (l, r)
+unSplit = unSplitWith (/= "")
 
 unSplitWith :: (Monad f, Alternative f) => (Text -> Bool) -> (Text, Text) -> f (Text,Text)
 unSplitWith f (l, r) = guard (f r) >> pure (l, r)
