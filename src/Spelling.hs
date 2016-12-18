@@ -58,6 +58,7 @@ fastWords t@(Text arr off len) = loop 0 0
 toHistogram :: [Text] -> Hist
 toHistogram = Map.fromListWith (+) . fmap (,1)
 
+fromListWithDefault f d = Map.fromListWith f . fmap (,d)
 -- def correction(word):
 --     return max(candidates(word), key=P)
 -- | most probable spelling correction for word
@@ -69,7 +70,7 @@ correction hist t = maximumBy (\a b -> prob a hist `compare` prob b hist) $ cand
 -- | Generate possible spelling corrections for word.
 candidates :: Hist -> Text -> Set Text
 candidates hist t = detect
-  [ known hist [t]
+  [ known hist $ Set.singleton t
   , known hist (edits1 t)
   , known hist (edits2 t)
   , Set.fromList [t]
@@ -82,8 +83,8 @@ detect = fromMaybe Set.empty . head . filter (not . Set.null)
 -- def known(words):
 --     return set(w for w in words if w in WORDS)
 -- | The subset of `words` that appear in the dictionary of WORDS.
-known :: Hist -> [Text] -> Set Text
-known hist ws = Set.fromList $ filter (\w -> Map.member w hist) ws
+known :: Hist -> Set Text -> Set Text
+known hist ws = Set.filter (\w -> Map.member w hist) ws
 
 -- def edits1(word):
 --     letters    = 'abcdefghijklmnopqrstuvwxyz'
@@ -94,8 +95,8 @@ known hist ws = Set.fromList $ filter (\w -> Map.member w hist) ws
 --     inserts    = [L + c + R               for L, R in splits for c in letters]
 --     return set(deletes + transposes + replaces + inserts)
 -- | All edits that are one edit away from `word`.
-edits1 :: Text -> [Text]
-edits1 w = nub' $ foldl' mappend mempty [transposes', deletes', replaces', inserts]
+edits1 :: Text -> Set Text
+edits1 w = Set.unions $ fmap Set.fromList [transposes', deletes', replaces', inserts]
   where
     splits = zip (T.inits w) (T.tails w)
     deletes' = deletes splits
@@ -106,8 +107,8 @@ edits1 w = nub' $ foldl' mappend mempty [transposes', deletes', replaces', inser
 -- def edits2(word):
 --     return (e2 for e1 in edits1(word) for e2 in edits1(e1))
 -- | All edits that are two edits away from `word`.
-edits2 :: Text -> [Text]
-edits2 w = nub' [ e2 | !e1 <- edits1 w, !e2 <- edits1 e1 ]
+edits2 :: Text -> Set Text
+edits2 w = Set.fromList [ e2 | e1 <- Set.toList $ edits1 w, e2 <- Set.toList $ edits1 e1 ]
 
 nub' :: [Text] -> [Text]
 nub' = Set.toList . Set.fromList

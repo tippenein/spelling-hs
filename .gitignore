@@ -1,5 +1,6 @@
 .cabal-sandbox*
 hasken.yml
+*.html
 tags
 *.db
 .stack-work/

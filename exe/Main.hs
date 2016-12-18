@@ -9,26 +9,7 @@ import Data.Text (words)
 
 import           Protolude
 
-wordsPreprocess =
-  (words <$> readFile "big-words.txt") >>= print . head . reverse
-
-wordsFast =
-  (fastWords <$> readFile "big.txt") >>= print . head . reverse
-
-multiset = do
-  hist <- toHistogram . words <$> readFile "big-words.txt"
-  traverse_ putText $ Map.keys hist
-
-proba = do
-  hist <- toHistogram . words <$> readFile "big-words.txt"
-  let p = prob "the" hist
-  printf "probability of 'the' -> %i" p
-
-makeCorrection = do
-  hist <- toHistogram . fastWords <$> readFile "big.txt"
-  -- putText $ correction hist "speling" -- spelling
-  putText $ correction hist "korrectud" -- "corrected"
-
+main :: IO ()
 main = do
   args <- getArgs
   case args of
@@ -38,11 +19,22 @@ main = do
     ["proba"] -> proba
     ["all"] -> makeCorrection
     _ -> makeCorrection
+  where
+    wordsPreprocess =
+      (words <$> readFile "big-words.txt") >>= print . head . reverse
 
--- main :: IO ()
--- main = do
---   hist <- toHistogram . words <$> readFile "big.txt"
---   putText $ correction hist "speling" -- spelling
---   putText $ correction hist "korrectud" -- "corrected"
---   let p = prob "the" hist
---   printf "probability of 'the' -> %i" p
+    wordsFast =
+      (fastWords <$> readFile "big.txt") >>= print . head . reverse
+
+    multiset = do
+      hist <- toHistogram . words <$> readFile "big-words.txt"
+      traverse_ putText $ Map.keys hist
+
+    proba = do
+      hist <- toHistogram . words <$> readFile "big-words.txt"
+      let p = prob "the" hist
+      printf "probability of 'the' -> %i" p
+
+    makeCorrection = do
+      hist <- toHistogram . fastWords <$> readFile "big.txt"
+      putText $ correction hist "korrectud" -- "corrected"
