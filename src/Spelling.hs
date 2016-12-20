@@ -17,7 +17,7 @@ import Data.Text.Internal (Text(..))
 import           Protolude hiding (Set)
 
 type Set a = Set.HashSet a
-type Hist = Map.HashMap Text Int
+type Counter = Map.HashMap Text Int
 
 -- dictLocation :: FilePath
 -- dictLocation = "/usr/share/dict/words"
@@ -28,7 +28,7 @@ alphabet = fmap T.singleton ['a'..'z']
 -- def P(word, N=sum(WORDS.values())):
 --     return WORDS[word] / N
 -- | Probability of `word`.
-prob :: Text -> Hist -> Int
+prob :: Text -> Counter -> Int
 prob t ms = occurences `div` totalWords
   where
     occurences = fromMaybe 0 $ Map.lookup t ms
@@ -54,25 +54,25 @@ fastWords t@(Text arr off len) = loop 0 0
         where Iter c d = iter t n
 {-# INLINE fastWords #-}
 
--- | create a Multi Set (Histogram) from a collection of words
-toHistogram :: [Text] -> Hist
-toHistogram = Map.fromListWith (+) . fmap (,1)
+-- | create a Multi Set (Counter) from a collection of words
+toCounter :: [Text] -> Counter
+toCounter = Map.fromListWith (+) . fmap (,1)
 
 fromListWithDefault f d = Map.fromListWith f . fmap (,d)
 -- def correction(word):
 --     return max(candidates(word), key=P)
 -- | most probable spelling correction for word
-correction :: Hist -> Text -> Text
-correction hist t = maximumBy (\a b -> prob a hist `compare` prob b hist) $ candidates hist t
+correction :: Counter -> Text -> Text
+correction counter t = maximumBy (\a b -> prob a counter `compare` prob b counter) $ candidates counter t
 
 -- def candidates(word):
 --     return (known([word]) or known(edits1(word)) or known(edits2(word)) or [word])
 -- | Generate possible spelling corrections for word.
-candidates :: Hist -> Text -> Set Text
-candidates hist t = detect
-  [ known hist $ Set.singleton t
-  , known hist (edits1 t)
-  , known hist (edits2 t)
+candidates :: Counter -> Text -> Set Text
+candidates counter t = detect
+  [ known counter [t]
+  , known counter (edits1 t)
+  , known counter (edits2 t)
   , Set.fromList [t]
   ]
 
@@ -83,8 +83,8 @@ detect = fromMaybe Set.empty . head . filter (not . Set.null)
 -- def known(words):
 --     return set(w for w in words if w in WORDS)
 -- | The subset of `words` that appear in the dictionary of WORDS.
-known :: Hist -> Set Text -> Set Text
-known hist ws = Set.filter (\w -> Map.member w hist) ws
+known :: Counter -> [Text] -> Set Text
+known counter ws = Set.fromList $ filter (\w -> Map.member w counter) ws
 
 -- def edits1(word):
 --     letters    = 'abcdefghijklmnopqrstuvwxyz'
@@ -95,8 +95,8 @@ known hist ws = Set.filter (\w -> Map.member w hist) ws
 --     inserts    = [L + c + R               for L, R in splits for c in letters]
 --     return set(deletes + transposes + replaces + inserts)
 -- | All edits that are one edit away from `word`.
-edits1 :: Text -> Set Text
-edits1 w = Set.unions $ fmap Set.fromList [transposes', deletes', replaces', inserts]
+edits1 :: Text -> [Text]
+edits1 w = nub' $ mconcat [transposes', deletes', replaces', inserts]
   where
     splits = zip (T.inits w) (T.tails w)
     deletes' = deletes splits
@@ -107,8 +107,8 @@ edits1 w = Set.unions $ fmap Set.fromList [transposes', deletes', replaces', ins
 -- def edits2(word):
 --     return (e2 for e1 in edits1(word) for e2 in edits1(e1))
 -- | All edits that are two edits away from `word`.
-edits2 :: Text -> Set Text
-edits2 w = Set.fromList [ e2 | e1 <- Set.toList $ edits1 w, e2 <- Set.toList $ edits1 e1 ]
+edits2 :: Text -> [Text]
+edits2 w = nub' [ e2 | e1 <- edits1 w, e2 <- edits1 e1 ]
 
 nub' :: [Text] -> [Text]
 nub' = Set.toList . Set.fromList

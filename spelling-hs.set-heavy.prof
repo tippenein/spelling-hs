@@ -7,7 +7,7 @@
 
 COST CENTRE           MODULE                 %time %alloc
 
-toHistogram           Spelling                36.1   24.1
+toCounter             Spelling                36.1   24.1
 edits2                Spelling                16.6   16.1
 main.makeCorrection   Main                     7.2    9.9
 edits1                Spelling                 7.1   10.4
@@ -29,7 +29,7 @@ COST CENTRE                     MODULE                         no.     entries  
 MAIN                            MAIN                           163          0    0.0    0.0   100.0  100.0
  main                           Main                           327          0    0.0    0.0   100.0  100.0
   main.makeCorrection           Main                           330          0    7.2    9.9   100.0  100.0
-   toHistogram                  Spelling                       371          0   36.1   24.1    39.5   24.3
+   toCounter                    Spelling                       371          0   36.1   24.1    39.5   24.3
     aBA                         Data.Text.Array                384    2116314    0.0    0.0     0.0    0.0
     copy                        Data.HashMap.Array             383      45798    0.2    0.0     0.2    0.0
     sparseIndex                 Data.HashMap.Base              382    1543962    0.5    0.0     0.5    0.0
@@ -183,8 +183,8 @@ MAIN                            MAIN                           163          0   
  CAF:main34                     Main                           318          0    0.0    0.0     0.0    0.0
   main                          Main                           359          0    0.0    0.0     0.0    0.0
    main.makeCorrection          Main                           360          0    0.0    0.0     0.0    0.0
- CAF:toHistogram                Spelling                       283          0    0.0    0.0     0.0    0.0
-  toHistogram                   Spelling                       370          1    0.0    0.0     0.0    0.0
+ CAF:toCounter                  Spelling                       283          0    0.0    0.0     0.0    0.0
+  toCounter                     Spelling                       370          1    0.0    0.0     0.0    0.0
  CAF:detect                     Spelling                       276          0    0.0    0.0     0.0    0.0
   detect                        Spelling                       349          1    0.0    0.0     0.0    0.0
  CAF:detect2                    Spelling                       275          0    0.0    0.0     0.0    0.0

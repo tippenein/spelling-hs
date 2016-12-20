@@ -15,7 +15,7 @@ main = do
   case args of
     ["wordsPre"] -> wordsPreprocess
     ["wordsFast"] -> wordsFast
-    ["toHistogram"] -> multiset
+    ["toCounter"] -> multiset
     ["proba"] -> proba
     ["all"] -> makeCorrection
     _ -> makeCorrection
@@ -27,14 +27,14 @@ main = do
       (fastWords <$> readFile "big.txt") >>= print . head . reverse
 
     multiset = do
-      hist <- toHistogram . words <$> readFile "big-words.txt"
-      traverse_ putText $ Map.keys hist
+      counter <- toCounter . words <$> readFile "big-words.txt"
+      traverse_ putText $ Map.keys counter
 
     proba = do
-      hist <- toHistogram . words <$> readFile "big-words.txt"
-      let p = prob "the" hist
+      counter <- toCounter . words <$> readFile "big-words.txt"
+      let p = prob "the" counter
       printf "probability of 'the' -> %i" p
 
     makeCorrection = do
-      hist <- toHistogram . fastWords <$> readFile "big.txt"
-      putText $ correction hist "korrectud" -- "corrected"
+      counter <- toCounter . fastWords <$> readFile "big.txt"
+      putText $ correction counter "mississippo" -- "corrected"

@@ -7,7 +7,7 @@
 
 COST CENTRE           MODULE                 %time %alloc
 
-toHistogram           Spelling                37.5   23.9
+toCounter             Spelling                37.5   23.9
 nub'                  Spelling                21.7   25.9
 makeCorrection        Main                     7.6    9.8
 edits1.inserts        Spelling                 6.1   15.5
@@ -30,7 +30,7 @@ COST CENTRE                     MODULE                         no.     entries  
 MAIN                            MAIN                           158          0    0.0    0.0   100.0  100.0
  main                           Main                           317          0    0.0    0.0   100.0  100.0
   makeCorrection                Main                           320          0    7.6    9.8   100.0  100.0
-   toHistogram                  Spelling                       353          0   37.5   23.9    40.2   24.1
+   toCounter                    Spelling                       353          0   37.5   23.9    40.2   24.1
     aBA                         Data.Text.Array                366    2116314    0.0    0.0     0.0    0.0
     copy                        Data.HashMap.Array             365      45798    0.2    0.0     0.2    0.0
     sparseIndex                 Data.HashMap.Base              364    1543962    0.5    0.0     0.5    0.0
@@ -181,8 +181,8 @@ MAIN                            MAIN                           158          0   
     maBA                        Data.Text.Array                348          2    0.0    0.0     0.0    0.0
  CAF:main30                     Main                           284          0    0.0    0.0     0.0    0.0
   makeCorrection                Main                           346          0    0.0    0.0     0.0    0.0
- CAF:toHistogram                Spelling                       278          0    0.0    0.0     0.0    0.0
-  toHistogram                   Spelling                       352          1    0.0    0.0     0.0    0.0
+ CAF:toCounter                  Spelling                       278          0    0.0    0.0     0.0    0.0
+  toCounter                     Spelling                       352          1    0.0    0.0     0.0    0.0
  CAF:alphabet                   Spelling                       271          0    0.0    0.0     0.0    0.0
   alphabet                      Spelling                       407          1    0.0    0.0     0.0    0.0
    run                          Data.Text.Array                409         26    0.0    0.0     0.0    0.0
