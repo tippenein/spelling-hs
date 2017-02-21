@@ -1,9 +1,44 @@
+> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE OverloadedStrings #-}
+> {-# LANGUAGE TupleSections #-}
+> {-# LANGUAGE BangPatterns #-}
+
+> import qualified Data.Char as Char
+> import qualified Data.HashMap.Strict as Map
+> import qualified Data.HashSet as Set
+> import           Data.List (foldl')
+> import qualified Data.Text as T
+> import Data.Text.Unsafe (Iter(..), iter)
+> import Data.Text.Internal (Text(..))
+
+> import           Protolude hiding (Set)
+
+> type Set a = Set.HashSet a
+> type Counter = Map.HashMap Text Int
+
 We split the raw text into words
 
 > words :: Text -> [Text]
 > words = T.split (not . Char.isAsciiLower) . T.toLower
+> slowWords = words
 
-This code is the intuitive answer to the problem above, however it's very slow. We'll look at performance later in this post.
+This code is the intuitive answer to the problem above, however it's very slow. We'll look at performance later in this post, but for now we can adapt the core of `words` based off https://hackage.haskell.org/package/text-1.2.2.1/docs/src/Data-Text.html#words
+
+> fastWords :: Text -> [Text]
+> fastWords t@(Text arr off len) = loop 0 0
+>   where
+>     loop !start !n
+>         | n >= len = if start == n
+>                      then []
+>                      else [Text arr (start+off) (n-start)]
+>         | not $ Char.isAsciiLower c =
+>             if start == n
+>             then loop (start+1) (start+1)
+>             else Text arr (start+off) (n-start) : loop (n+d) (n+d)
+>         | otherwise = loop start (n+d)
+>         where Iter c d = iter t n
+> {-# INLINE fastWords #-}
+
 
 ## Counter / Bag
 
